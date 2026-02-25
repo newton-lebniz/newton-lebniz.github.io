@@ -120,6 +120,7 @@
                     <p>3. ROT13 - Caesar shifted by exactly 13</p>
                     <button onclick="decode()">ROT13 Decode</button>
                     <button onclick="bruteForce()">Brute Force Caesar</button>
+                    <button onclick="vigenereDecode()">vigenere decode</button>
                 `;
             } else if (/^[0-7\s]+$/.test(input) && input.length > 3) {
                 currentType = "octal";
@@ -182,6 +183,27 @@
             }
 
             document.getElementById("decoded").innerHTML = "<h3>Decoded: " + result + "</h3>";
+        }
+
+        function vigenereDecode(){
+            let input = currentInput;
+            let key = prompt("enter the vigenere:").toUpperCase();
+            let result = "";
+            let keyIndex = 0;
+
+            for(let i=0;i<input.length;i++){
+                let c = input[i];
+                if(/[a-zA-Z]/.test(c)){
+                    let base = c === c.toUpperCase()?65:97;
+                    let shift = key.charCodeAt(keyIndex%key.length) - 65;
+                    result += String.fromCharCode((c.charCodeAt(0)-base-shift+26)%26+base);
+                    keyIndex++;
+                }
+                else{
+                    result+=c;
+                }
+            }
+            document.getElementById("decoded").innerHTML = "<h3>vigenere decoded: " + result +"</h3>";
         }
 
         function bruteForce() {
