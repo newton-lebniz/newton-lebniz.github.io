@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CTF Learning Assistant</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ff00;
+            font-family: monospace;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #1a1a1a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #00ff00;
+            color: #0d0d0d;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-right: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00cc00;
+        }
+        #output {
+            margin-top: 20px;
+            background: #1a1a1a;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            min-height: 50px;
+        }
+        #decoded {
+            margin-top: 10px;
+            color: #ffff00;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CTF Learning Assistant</h1>
+    <textarea id="input" placeholder="Paste your CTF string here..."></textarea>
+    <br>
+    <button onclick="detect()">Detect & Explain</button>
+    <div id="output"></div>
+    <div id="decoded"></div>
+
+    <script>
+        let currentType = "";
+        let currentInput = "";
+
+        function detect() {
+            let input = document.getElementById("input").value.trim();
+            let output = document.getElementById("output");
+            document.getElementById("decoded").innerHTML = "";
+            currentInput = input;
+
+            if (!input) {
+                output.innerHTML = "please enter a string";
+                return;
+            }
+
+            if (/^[01\s]+$/.test(input) && (input.includes(" ") || input.length % 8 === 0)) {
+                currentType = "binary";
+                output.innerHTML = `
+                    <h3>Detected: Binary</h3>
+                    <h4>Prerequisites:</h4>
+                    <p>1. Binary number system - only 0s and 1s</p>
+                    <p>2. Each group of 8 bits = 1 byte = 1 character</p>
+                    <p>3. ASCII - each character has a binary representation</p>
+                    <button onclick="decode()">Decode</button>
+                `;
+            } else if (/^[0-9a-fA-F\s]+$/.test(input) && input.replaceAll(" ", "").length % 2 === 0) {
+                currentType = "hex";
+                output.innerHTML = `
+                    <h3>Detected: Hex</h3>
+                    <h4>Prerequisites:</h4>
+                    <p>1. ASCII - every character has a number</p>
+                    <p>2. Binary - computers store everything as 0s and 1s</p>
+                    <p>3. Hexadecimal notation - uses 0-9 and A-F</p>
+                    <button onclick="decode()">Decode</button>
+                `;
+            } else if (/^[a-zA-Z0-9+\/]+=*$/.test(input) && input.length % 4 === 0) {
+                currentType = "base64";
+                output.innerHTML = `
+                    <h3>Detected: Base64</h3>
+                    <h4>Prerequisites:</h4>
+                    <p>1. ASCII - every character has a number</p>
+                    <p>2. Binary - bits and bytes</p>
+                    <p>3. Encoding vs Encryption - base64 is NOT encryption</p>
+                    <p>4. Base64 character list - A-Z, a-z, 0-9, +, /</p>
+                    <button onclick="decode()">Decode</button>
+                `;
+            } else if (/^[a-zA-Z\s]+$/.test(input) && input.length > 3) {
+                currentType = "caesar";
+                output.innerHTML = `
+                    <h3>Detected: Possibly ROT13 or Caesar Cipher</h3>
+                    <h4>Prerequisites:</h4>
+                    <p>1. Alphabet indexing - every letter has a position</p>
+                    <p>2. Caesar cipher - letters shifted by a fixed number</p>
+                    <p>3. ROT13 - Caesar shifted by exactly 13</p>
+                    <button onclick="decode()">ROT13 Decode</button>
+                    <button onclick="bruteForce()">Brute Force Caesar</button>
+                `;
+            } else if (/^[0-7\s]+$/.test(input) && input.length > 3) {
+                currentType = "octal";
+                output.innerHTML = `
+                    <h3>Detected: Octal</h3>
+                    <h4>Prerequisites:</h4>
+                    <p>1. Octal number system - uses digits 0-7 only</p>
+                    <p>2. Each octal number represents a character</p>
+                    <p>3. ASCII - each character has an octal representation</p>
+                    <button onclick="decode()">Decode</button>
+                `;
+            } else if (/^[\d\s{}]+$/.test(input)) {
+                currentType = "a1z26";
+                output.innerHTML=`
+                <h3>A1Z26 detected</h3>
+                <h4>prerequisites:</h4>
+                <p>1. alphabet indexing a=1,b=2...</p>
+                <p>2. numbers outsite 1-26 are not letters</p>
+                <button onclick="decode()">decode</button>
+                `;
+            } else {
+                output.innerHTML = "<p>Could not identify encoding type</p>";
+            }
+        }
+
+        function decode() {
+            let input = currentInput;
+            let result = "";
+
+            if (currentType === "binary") {
+                let bytes = input.includes(" ") ? input.trim().split(" ") : input.trim().match(/.{8}/g);
+                result = bytes.map(b => String.fromCharCode(parseInt(b, 2))).join("");
+            } else if (currentType === "hex") {
+                let clean = input.replaceAll(" ", "");
+                for (let i = 0; i < clean.length; i += 2) {
+                    result += String.fromCharCode(parseInt(clean.substr(i, 2), 16));
+                }
+            } else if (currentType === "base64") {
+                result = atob(input);
+            } else if (currentType === "caesar") {
+                result = input.split("").map(c => {
+                    if (/[a-zA-Z]/.test(c)) {
+                        let base = c === c.toUpperCase() ? 65 : 97;
+                        return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
+                    }
+                    return c;
+                }).join("");
+            } else if (currentType === "octal") {
+                result = input.trim().split(" ").map(o => String.fromCharCode(parseInt(o, 8))).join("");
+            } else if(currentType==="a1z26"){
+                result = input.split(" ").map(token =>{
+                    if(token === "{") return "{";
+                    if (token === "}") return "}";
+                    let num = parseInt(token);
+                    if(num>=1 && num<=26){
+                        return String.fromCharCode(num+64);
+                    }
+                    return token;
+                }).join("");
+            }
+
+            document.getElementById("decoded").innerHTML = "<h3>Decoded: " + result + "</h3>";
+        }
+
+        function bruteForce() {
+            let input = currentInput;
+            let result = "<h3>All Caesar Shifts:</h3>";
+            for (let shift = 1; shift <= 25; shift++) {
+                let decoded = input.split("").map(c => {
+                    if (/[a-zA-Z]/.test(c)) {
+                        let base = c === c.toUpperCase() ? 65 : 97;
+                        return String.fromCharCode((c.charCodeAt(0) - base + shift) % 26 + base);
+                    }
+                    return c;
+                }).join("");
+                result += `<p>Shift ${shift}: ${decoded}</p>`;
+            }
+            document.getElementById("decoded").innerHTML = result;
+        }
+    </script>
+</body>
+</html>
