@@ -74,12 +74,101 @@
     <textarea id="input" placeholder="Paste your CTF string here..."></textarea>
     <br>
     <button onclick="detect()">Detect & Explain</button>
+    <button onclick="tryAll()">Try All Decoders</button>
     <div id="output"></div>
     <div id="decoded"></div>
 
     <script>
         let currentType = "";
         let currentInput = "";
+
+        function tryAll() {
+            let input = document.getElementById("input").value.trim();
+            if (!input) {
+                document.getElementById("output").innerHTML = "please enter a string";
+                return;
+             }
+
+    let results = "<h3>All Decoder Results:</h3>";
+
+    try {
+        let r = atob(input);
+        if (r && /[\x20-\x7E]/.test(r)) results += `<p><b>Base64:</b> ${r}</p>`;
+    } catch(e) {}
+
+    try {
+        let clean = input.replaceAll(" ","");
+        if (/^[0-9a-fA-F]+$/.test(clean) && clean.length%2===0) {
+            let r = "";
+            for (let i=0;i<clean.length;i+=2) r += String.fromCharCode(parseInt(clean.substr(i,2),16));
+            if (/[\x20-\x7E]/.test(r)) results += `<p><b>Hex:</b> ${r}</p>`;
+        }
+    } catch(e) {}
+
+    try {
+        let bytes = input.includes(" ") ? input.trim().split(" ") : input.trim().match(/.{8}/g);
+        if (bytes) {
+            let r = bytes.map(b => String.fromCharCode(parseInt(b,2))).join("");
+            if (/[\x20-\x7E]/.test(r)) results += `<p><b>Binary:</b> ${r}</p>`;
+        }
+    } catch(e) {}
+
+    try {
+        let r = input.split("").map(c => {
+            if (/[a-zA-Z]/.test(c)) {
+                let base = c===c.toUpperCase()?65:97;
+                return String.fromCharCode((c.charCodeAt(0)-base+13)%26+base);
+            }
+            return c;
+        }).join("");
+        results += `<p><b>ROT13:</b> ${r}</p>`;
+    } catch(e) {}
+
+    try {
+        let r = decodeURIComponent(input);
+        if (r !== input) results += `<p><b>URL:</b> ${r}</p>`;
+    } catch(e) {}
+
+    try {
+        let parts = input.trim().split(" ");
+        if (parts.every(p => /^[0-7]+$/.test(p))) {
+            let r = parts.map(o => String.fromCharCode(parseInt(o,8))).join("");
+            if (/[\x20-\x7E]/.test(r)) results += `<p><b>Octal:</b> ${r}</p>`;
+        }
+    } catch(e) {}
+
+    try {
+        const morseMap = {
+            '.-':'A','-...':'B','-.-.':'C','-..':'D','.':'E',
+            '..-.':'F','--.':'G','....':'H','..':'I','.---':'J',
+            '-.-':'K','.-..':'L','--':'M','-.':'N','---':'O',
+            '.--.':'P','--.-':'Q','.-.':'R','...':'S','-':'T',
+            '..-':'U','...-':'V','.--':'W','-..-':'X','-.--':'Y',
+            '--..':'Z','-----':'0','.----':'1','..---':'2',
+            '...--':'3','....-':'4','.....':'5','-....':'6',
+            '--...':'7','---..':'8','----.':'9'
+        };
+        let r = input.trim().split(" / ").map(word =>
+            word.split(" ").map(code => morseMap[code]||"?").join("")
+        ).join(" ");
+        if (!r.includes("?")) results += `<p><b>Morse:</b> ${r}</p>`;
+    } catch(e) {}
+
+    try {
+        let parts = input.split(" ");
+        if (parts.every(p => p==="{" || p==="}" || (parseInt(p)>=1 && parseInt(p)<=26))) {
+            let r = parts.map(token => {
+                if (token==="{") return "{";
+                if (token==="}") return "}";
+                return String.fromCharCode(parseInt(token)+64);
+            }).join("");
+            results += `<p><b>A1Z26:</b> ${r}</p>`;
+        }
+    } catch(e) {}
+
+    document.getElementById("output").innerHTML = results;
+    document.getElementById("decoded").innerHTML = "";
+}
 
         function detect() {
             let input = document.getElementById("input").value.trim();
