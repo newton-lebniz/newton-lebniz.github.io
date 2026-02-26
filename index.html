@@ -1,8 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>CTF Learning Assistant</title>
+    <link href = "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --green: #00ff41;
+            --green-dim: #00aa2b;
+            --green-glow: rgba(0,255,65,0.15);
+            --yellow:#ffd700;
+            --red:#ff003c;
+            --bg:#030a03;
+            --surface:#080f08;
+            --border:rgba(0,255,65,0.3);
+        }
+        
         body {
             background-color: #0d0d0d;
             color: #00ff00;
@@ -118,6 +131,7 @@
                     <p>1. Alphabet indexing - every letter has a position</p>
                     <p>2. Caesar cipher - letters shifted by a fixed number</p>
                     <p>3. ROT13 - Caesar shifted by exactly 13</p>
+                    <p>4. Vigenère cipher is a polyalphabetic encryption method using a keyword to encode a message</p>
                     <button onclick="decode()">ROT13 Decode</button>
                     <button onclick="bruteForce()">Brute Force Caesar</button>
                     <button onclick="vigenereDecode()">vigenere decode</button>
@@ -139,6 +153,17 @@
                 <h4>prerequisites:</h4>
                 <p>1. alphabet indexing a=1,b=2...</p>
                 <p>2. numbers outsite 1-26 are not letters</p>
+                <button onclick="decode()">decode</button>
+                `;
+            } else if (/%[0-9a-fA-F]{2}/.test(input)){
+                currentType="url";
+                output.innerHTML=`
+                <h3>URL encoding detected</h3>
+                <h4>prerequisites:</h4>
+                <p>1. URL encoding replaces unsafe characters with % followed by hex code</p>
+                <p>2. space becomes %20, { becomes %7B, } becomes %7D</p>
+                <p>3. used in web requests to safely transfmit speacial characters</p>
+                <p>4. common in web exploitation ctf challenges</p>
                 <button onclick="decode()">decode</button>
                 `;
             } else {
@@ -180,6 +205,8 @@
                     }
                     return token;
                 }).join("");
+            } else if (currentType==="url"){
+                result=decodeURIComponent(input);
             }
 
             document.getElementById("decoded").innerHTML = "<h3>Decoded: " + result + "</h3>";
