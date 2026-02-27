@@ -212,10 +212,10 @@
                     <p>4. Base64 character list - A-Z, a-z, 0-9, +, /</p>
                     <button onclick="decode()">Decode</button>
                 `;
-            } else if (/^[a-zA-Z\s]+$/.test(input) && input.length > 3) {
+            } else if (/^[a-zA-Z\s\{\}_0-9]+$/.test(input) && input.length > 3) {
                 currentType = "caesar";
                 output.innerHTML = `
-                    <h3>Detected: Possibly ROT13 or Caesar Cipher</h3>
+                    <h3>Detected: Possibly ROT13 or Caesar Cipher or vegenere cipher</h3>
                     <h4>Prerequisites:</h4>
                     <p>1. Alphabet indexing - every letter has a position</p>
                     <p>2. Caesar cipher - letters shifted by a fixed number</p>
