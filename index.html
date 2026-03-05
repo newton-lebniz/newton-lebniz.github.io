@@ -5,17 +5,6 @@
     <title>CTF Learning Assistant</title>
     <link href = "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --green: #00ff41;
-            --green-dim: #00aa2b;
-            --green-glow: rgba(0,255,65,0.15);
-            --yellow:#ffd700;
-            --red:#ff003c;
-            --bg:#030a03;
-            --surface:#080f08;
-            --border:rgba(0,255,65,0.3);
-        }
-        
         body {
             background-color: #0d0d0d;
             color: #00ff00;
@@ -67,6 +56,16 @@
             color: #ffff00;
             font-size: 18px;
         }
+        #vigenereKey {
+            display: none;
+            background: #1a1a1a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 8px;
+            font-family: monospace;
+            margin-top: 10px;
+            width: 250px;
+        }
     </style>
 </head>
 <body>
@@ -75,6 +74,8 @@
     <br>
     <button onclick="detect()">Detect & Explain</button>
     <button onclick="tryAll()">Try All Decoders</button>
+    <br>
+    <input id="vigenereKey" placeholder="Vigeneree key(if needed)" >
     <div id="output"></div>
     <div id="decoded"></div>
 
@@ -85,7 +86,7 @@
         function tryAll() {
             let input = document.getElementById("input").value.trim();
             if (!input) {
-                document.getElementById("output").innerHTML = "please enter a string";
+                document.getElementById("output").innerHTML = "enter a string";
                 return;
              }
 
@@ -144,9 +145,7 @@
             '-.-':'K','.-..':'L','--':'M','-.':'N','---':'O',
             '.--.':'P','--.-':'Q','.-.':'R','...':'S','-':'T',
             '..-':'U','...-':'V','.--':'W','-..-':'X','-.--':'Y',
-            '--..':'Z','-----':'0','.----':'1','..---':'2',
-            '...--':'3','....-':'4','.....':'5','-....':'6',
-            '--...':'7','---..':'8','----.':'9'
+            '--..':'Z'
         };
         let r = input.trim().split(" / ").map(word =>
             word.split(" ").map(code => morseMap[code]||"?").join("")
@@ -313,21 +312,32 @@
         '-.-':'K', '.-..':'L', '--':'M', '-.':'N', '---':'O',
         '.--.':'P', '--.-':'Q', '.-.':'R', '...':'S', '-':'T',
         '..-':'U', '...-':'V', '.--':'W', '-..-':'X', '-.--':'Y',
-        '--..':'Z', '-----':'0', '.----':'1', '..---':'2',
-        '...--':'3', '....-':'4', '.....':'5', '-....':'6',
-        '--...':'7', '---..':'8', '----.':'9'
+        '--..':'Z'
                 };
                 result = input.trim().split(" / ").map(word=>
                     word.split(" ").map(code => morseMap[code] || "?").join("")
                 ).join(" ");
             }
 
-            document.getElementById("decoded").innerHTML = "<h3>Decoded: " + result + "</h3>";
+            let decodedDiv = document.getElementById("decoded");
+            decodedDiv.textContent = "decoded: " + result;
         }
 
         function vigenereDecode(){
+        let keyInput = document.getElementById("vigenereKey");
+        
+        if(keyInput.style.display==="none" || keyInput.style.display === ""){
+            keyInput.style.display="inline-block";
+            keyInput.focus();
+            return;
+        }
+
+        let key = keyInput.value.toUpperCase();
+        if(!key){
+            keyInput.focus();
+            return;
+        }
             let input = currentInput;
-            let key = prompt("enter the vigenere:").toUpperCase();
             let result = "";
             let keyIndex = 0;
 
@@ -343,6 +353,8 @@
                     result+=c;
                 }
             }
+            let decodedDiv= document.getElementById("decoded");
+            decodedDiv.textContent="vigenere decoded:" + result;
             document.getElementById("decoded").innerHTML = "<h3>vigenere decoded: " + result +"</h3>";
         }
 
