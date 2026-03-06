@@ -346,7 +346,7 @@
                 if(/[a-zA-Z]/.test(c)){
                     let base = c === c.toUpperCase()?65:97;
                     let shift = key.charCodeAt(keyIndex%key.length) - 65;
-                    result += String.fromCharCode((c.charCodeAt(0)-base-shift+26)%26+base);
+                    result += String.fromCharCode((c.charCodeAt(0)-base-shift+26)%26+base); //// 26 add kiya coz without it values can be -ve too and charcode cant handle that 
                     keyIndex++;
                 }
                 else{
@@ -375,4 +375,5 @@
         }
     </script>
 </body>
+
 </html>
