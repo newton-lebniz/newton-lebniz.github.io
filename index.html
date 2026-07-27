@@ -1,380 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CTF Learning Assistant</title>
-    <link href = "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #0d0d0d;
-            color: #00ff00;
-            font-family: monospace;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #00ff00;
-            border-bottom: 1px solid #00ff00;
-            padding-bottom: 10px;
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            background: #1a1a1a;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-        }
-        button {
-            background: #00ff00;
-            color: #0d0d0d;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            margin-right: 5px;
-            font-family: monospace;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background: #00cc00;
-        }
-        #output {
-            margin-top: 20px;
-            background: #1a1a1a;
-            padding: 20px;
-            border: 1px solid #00ff00;
-            min-height: 50px;
-        }
-        #decoded {
-            margin-top: 10px;
-            color: #ffff00;
-            font-size: 18px;
-        }
-        #vigenereKey {
-            display: none;
-            background: #1a1a1a;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 8px;
-            font-family: monospace;
-            margin-top: 10px;
-            width: 250px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manswi Pradhan — Math & Computing, IIIT Raichur</title>
+<meta name="description" content="Manswi Pradhan — B.Tech Mathematics & Computing student at IIIT Raichur. Builds explainable tools across cybersecurity, applied ML, and cryptography.">
+<meta name="keywords" content="Manswi Pradhan, IIIT Raichur, Mathematics and Computing, CTF, cybersecurity, machine learning, cryptography, portfolio">
+<meta name="author" content="Manswi Pradhan">
+<meta name="theme-color" content="#1B2A4A">
+<link rel="canonical" href="https://newton-lebniz.github.io/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Manswi Pradhan — Math & Computing, IIIT Raichur">
+<meta property="og:description" content="I build tools that explain themselves — a Caesar-cipher cracker that shows its chi-squared math, a medical chatbot that shows its reasoning.">
+<meta property="og:url" content="https://newton-lebniz.github.io/">
+<meta property="og:image" content="https://newton-lebniz.github.io/preview.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Manswi Pradhan — Math & Computing, IIIT Raichur">
+<meta name="twitter:description" content="I build tools that explain themselves — a Caesar-cipher cracker that shows its chi-squared math, a medical chatbot that shows its reasoning.">
+<meta name="twitter:image" content="https://newton-lebniz.github.io/preview.png">
+
+<!-- Favicon (inline SVG, no extra file needed) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2218%22 fill=%22%231B2A4A%22/><text x=%2250%22 y=%2268%22 font-size=%2258%22 font-family=%22monospace%22 fill=%22%23C98A2C%22 text-anchor=%22middle%22>M</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F7F8FA;
+    --grid-line: #E2E6ED;
+    --ink: #1B2A4A;
+    --ink-soft: #4A5A78;
+    --amber: #C98A2C;
+    --forest: #2F6F4F;
+    --card-dark: #101826;
+    --card-dark-text: #E7ECF3;
+    --border: #D7DCE5;
+    --max-w: 880px;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+  }
+  h1,h2,h3{ font-family:'Spectral', serif; font-weight:600; color:var(--ink); }
+  a{ color:var(--amber); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
+  code, .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .wrap{ max-width:var(--max-w); margin:0 auto; padding:0 24px; }
+  section{ padding:72px 0; border-bottom:1px solid var(--border); }
+  section:last-of-type{ border-bottom:none; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--forest); letter-spacing:.04em; margin-bottom:8px; }
+  .eyebrow::before{ content:"§ "; color:var(--amber); }
+
+  /* HERO */
+  .hero{ padding-top:96px; padding-bottom:56px; }
+  .hero-role{ font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--ink-soft); margin-bottom:18px; }
+  .decode{ font-size:clamp(36px,7vw,64px); font-weight:700; letter-spacing:-0.01em; min-height:1.2em; }
+  .decode .amber{ color:var(--amber); }
+  .hero-sub{ margin-top:20px; max-width:560px; color:var(--ink-soft); font-size:17px; }
+  .hero-links{ margin-top:28px; display:flex; gap:20px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:14px; }
+
+  /* ABOUT */
+  .about-text{ max-width:640px; color:var(--ink-soft); font-size:17px; }
+  .about-text strong{ color:var(--ink); }
+
+  /* PROJECTS */
+  .project{ padding:28px 0; border-top:1px solid var(--border); }
+  .project:first-of-type{ border-top:none; }
+  .project-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
+  .project-head h3{ font-size:22px; }
+  .project-role{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--forest); text-transform:uppercase; letter-spacing:.05em; }
+  .project p{ color:var(--ink-soft); margin-top:8px; max-width:640px; }
+  .project-contrib{ margin-top:8px; font-size:15px; }
+  .project-contrib strong{ color:var(--ink); }
+  .tags{ margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+  .tag{ font-family:'IBM Plex Mono', monospace; font-size:12px; background:#EDF0F5; border:1px solid var(--border); color:var(--ink-soft); padding:3px 9px; border-radius:3px; }
+  .project-links{ margin-top:14px; display:flex; gap:18px; font-family:'IBM Plex Mono', monospace; font-size:13px; }
+
+  /* SKILLS */
+  .skill-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .skill-group h4{ font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--forest); margin-bottom:10px; text-transform:uppercase; letter-spacing:.04em; }
+  .skill-group ul{ list-style:none; color:var(--ink-soft); font-size:15px; }
+  .skill-group li{ padding:3px 0; }
+  @media (max-width:560px){ .skill-grid{ grid-template-columns:1fr; } }
+
+  /* RESUME */
+  .resume-card{ background:var(--card-dark); color:var(--card-dark-text); padding:28px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .resume-card p{ color:#AAB6C8; font-size:14px; margin-top:4px; }
+  .btn{ font-family:'IBM Plex Mono', monospace; background:var(--amber); color:#1B1408; padding:10px 20px; border-radius:4px; font-size:14px; font-weight:600; display:inline-block; }
+  .btn:hover{ text-decoration:none; filter:brightness(1.08); }
+
+  /* GITHUB STATS */
+  .stats-img{ width:100%; max-width:480px; border-radius:6px; border:1px solid var(--border); }
+
+  /* WRITING */
+  .post{ padding:18px 0; border-top:1px solid var(--border); }
+  .post:first-of-type{ border-top:none; }
+  .post-title{ font-size:18px; font-weight:600; }
+  .post-status{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft); background:#EDF0F5; padding:2px 8px; border-radius:3px; margin-left:8px; }
+
+  /* CONTACT */
+  .contact-list{ font-family:'IBM Plex Mono', monospace; font-size:16px; display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+
+  footer{ padding:32px 0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft); }
+
+  @media (prefers-reduced-motion: reduce){ * { animation:none !important; transition:none !important; } }
+</style>
 </head>
 <body>
-    <h1>CTF Learning Assistant</h1>
-    <textarea id="input" placeholder="Paste your CTF string here..."></textarea>
-    <br>
-    <button onclick="detect()">Detect & Explain</button>
-    <button onclick="tryAll()">Try All Decoders</button>
-    <br>
-    <input id="vigenereKey" placeholder="Vigeneree key(if needed)" >
-    <div id="output"></div>
-    <div id="decoded"></div>
 
-    <script>
-        let currentType = "";
-        let currentInput = "";
+<div class="wrap hero">
+  <div class="hero-role">B.Tech Mathematics &amp; Computing — IIIT Raichur</div>
+  <h1 class="decode mono" id="decodeText">MANSWI PRADHAN</h1>
+  <p class="hero-sub">I build tools that explain themselves — a Caesar-cipher cracker that shows its chi-squared math, a medical chatbot that shows its reasoning. Currently deep in CTF challenges and web security.</p>
+  <p class="hero-sub" style="margin-top:12px; font-size:15px;">The thread connecting it: <strong style="color:var(--ink);">explainable systems</strong> — whether the domain is cybersecurity, applied ML, or the math underneath both.</p>
+  <div class="hero-links">
+    <a href="#projects">→ projects</a>
+    <a href="https://github.com/newton-lebniz" target="_blank" rel="noopener">→ github</a>
+    <a href="https://www.linkedin.com/in/manswi-pradhan-462a21231" target="_blank" rel="noopener">→ linkedin</a>
+  </div>
+</div>
 
-        function tryAll() {
-            let input = document.getElementById("input").value.trim();
-            if (!input) {
-                document.getElementById("output").innerHTML = "enter a string";
-                return;
-             }
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">about</div>
+    <p class="about-text">2nd-year <strong>Mathematics &amp; Computing</strong> student at IIIT Raichur, coming in with a Mass Communication background — which mostly means I default to explaining things clearly instead of assuming the reader already knows the jargon. That habit shows up in my projects: every tool I build tries to teach the "why," not just spit out an answer. I compete in CTFs and hackathons, and I'm using cybersecurity as my differentiator against a very ML-heavy peer group.</p>
+  </div>
+</section>
 
-    let results = "<h3>All Decoder Results:</h3>";
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow">what I've built</div>
+    <h2 style="margin-bottom:8px;">Projects</h2>
 
-    try {
-        let r = atob(input);
-        if (r && /[\x20-\x7E]/.test(r)) results += `<p><b>Base64:</b> ${r}</p>`;
-    } catch(e) {}
+    <div class="project">
+      <div class="project-head">
+        <h3>CTF Learning Assistant</h3>
+        <span class="project-role">Solo project</span>
+      </div>
+      <p>A browser-based tool that detects encoding types from raw strings and teaches the prerequisite concepts before showing the decode — built because most CTF tools just hand you an answer with zero explanation.</p>
+      <div class="project-contrib"><strong>Built:</strong> detectors for 10+ encodings (Base64, Hex, Binary, ROT13, Vigenère, Morse, Octal, A1Z26, URL encoding), chi-squared frequency analysis for auto-cracking Caesar ciphers, and a Base32/XOR detector layer.</div>
+      <div class="tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Cybersecurity</span></div>
+      <div class="project-links">
+        <a href="https://newton-lebniz.github.io/CTF-Learning-Assistant/" target="_blank" rel="noopener">live demo →</a>
+        <a href="https://github.com/newton-lebniz/CTF-Learning-Assistant" target="_blank" rel="noopener">source →</a>
+      </div>
+    </div>
 
-    try {
-        let clean = input.replaceAll(" ","");
-        if (/^[0-9a-fA-F]+$/.test(clean) && clean.length%2===0) {
-            let r = "";
-            for (let i=0;i<clean.length;i+=2) r += String.fromCharCode(parseInt(clean.substr(i,2),16));
-            if (/[\x20-\x7E]/.test(r)) results += `<p><b>Hex:</b> ${r}</p>`;
-        }
-    } catch(e) {}
+    <div class="project">
+      <div class="project-head">
+        <h3>MediFind</h3>
+        <span class="project-role">3-person team · supervised by Dr. Kaushiki Roy</span>
+      </div>
+      <p>An AI-powered medical chatbot that triages symptoms and recommends nearby doctors based on specialty-matching.</p>
+      <div class="project-contrib"><strong>My contribution:</strong> the full frontend, the vector search layer (semantic specialist-matching using Sentence Transformers), AI classification with a keyword fallback, and symptom extraction.</div>
+      <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Sentence Transformers</span><span class="tag">Groq/LLaMA</span><span class="tag">MySQL</span></div>
+      <div class="project-links">
+        <a href="https://github.com/newton-lebniz/MediFind" target="_blank" rel="noopener">source →</a>
+      </div>
+    </div>
 
-    try {
-        let bytes = input.includes(" ") ? input.trim().split(" ") : input.trim().match(/.{8}/g);
-        if (bytes) {
-            let r = bytes.map(b => String.fromCharCode(parseInt(b,2))).join("");
-            if (/[\x20-\x7E]/.test(r)) results += `<p><b>Binary:</b> ${r}</p>`;
-        }
-    } catch(e) {}
+    <div class="project">
+      <div class="project-head">
+        <h3>Fruit Recognition — VGG16 Transfer Learning</h3>
+        <span class="project-role">3-person team</span>
+      </div>
+      <p>A 15-class fruit image classifier built on a transfer-learned VGG16 backbone, comparing CrossEntropy vs Focal Loss.</p>
+      <div class="project-contrib"><strong>My contribution:</strong> model architecture (frozen conv layers, custom classifier head) and the training loop — Experiment 1 hit 97% test accuracy.</div>
+      <div class="tags"><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Transfer Learning</span></div>
+      <div class="project-links">
+        <a href="https://github.com/newton-lebniz/Fruit-Recognition" target="_blank" rel="noopener">source →</a>
+      </div>
+    </div>
 
-    try {
-        let r = input.split("").map(c => {
-            if (/[a-zA-Z]/.test(c)) {
-                let base = c===c.toUpperCase()?65:97;
-                return String.fromCharCode((c.charCodeAt(0)-base+13)%26+base);
-            }
-            return c;
-        }).join("");
-        results += `<p><b>ROT13:</b> ${r}</p>`;
-    } catch(e) {}
+    <div class="project">
+      <div class="project-head">
+        <h3>picoCTF Writeups</h3>
+        <span class="project-role">Solo</span>
+      </div>
+      <p>Solutions and walkthroughs across Forensics, Cryptography, and General Skills categories — written to show the reasoning path to a solve, not just the final flag.</p>
+      <div class="project-contrib"><strong>Structure:</strong> organized by category (Forensics, Cryptography, General Skills), each writeup covering the tools used, the dead ends hit, and the actual technique that cracked it.</div>
+      <div class="tags"><span class="tag">Cryptography</span><span class="tag">Forensics</span><span class="tag">CTF</span></div>
+      <div class="project-links">
+        <a href="https://github.com/newton-lebniz/picoCTF-writeups" target="_blank" rel="noopener">source →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    try {
-        let r = decodeURIComponent(input);
-        if (r !== input) results += `<p><b>URL:</b> ${r}</p>`;
-    } catch(e) {}
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">tech</div>
+    <h2 style="margin-bottom:24px;">Skills</h2>
+    <div class="skill-grid">
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <ul><li>C</li><li>Java</li><li>Python</li><li>JavaScript</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>ML / Data</h4>
+        <ul><li>PyTorch</li><li>Sentence Transformers</li><li>MySQL</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>Web</h4>
+        <ul><li>HTML / CSS</li><li>FastAPI</li></ul>
+      </div>
+      <div class="skill-group">
+        <h4>Tools</h4>
+        <ul><li>Linux</li><li>Git</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-    try {
-        let parts = input.trim().split(" ");
-        if (parts.every(p => /^[0-7]+$/.test(p))) {
-            let r = parts.map(o => String.fromCharCode(parseInt(o,8))).join("");
-            if (/[\x20-\x7E]/.test(r)) results += `<p><b>Octal:</b> ${r}</p>`;
-        }
-    } catch(e) {}
+<section id="resume">
+  <div class="wrap">
+    <div class="eyebrow">resume</div>
+    <div class="resume-card">
+      <div>
+        <div style="font-family:'Spectral',serif; font-size:20px; font-weight:600;">Full resume, one page.</div>
+        <p>Updated for the current internship search.</p>
+      </div>
+      <a class="btn" href="resume.pdf" download>Download PDF ↓</a>
+    </div>
+  </div>
+</section>
 
-    try {
-        const morseMap = {
-            '.-':'A','-...':'B','-.-.':'C','-..':'D','.':'E',
-            '..-.':'F','--.':'G','....':'H','..':'I','.---':'J',
-            '-.-':'K','.-..':'L','--':'M','-.':'N','---':'O',
-            '.--.':'P','--.-':'Q','.-.':'R','...':'S','-':'T',
-            '..-':'U','...-':'V','.--':'W','-..-':'X','-.--':'Y',
-            '--..':'Z'
-        };
-        let r = input.trim().split(" / ").map(word =>
-            word.split(" ").map(code => morseMap[code]||"?").join("")
-        ).join(" ");
-        if (!r.includes("?")) results += `<p><b>Morse:</b> ${r}</p>`;
-    } catch(e) {}
+<section id="stats">
+  <div class="wrap">
+    <div class="eyebrow">activity</div>
+    <h2 style="margin-bottom:20px;">GitHub</h2>
+    <img class="stats-img" src="https://github-readme-stats.vercel.app/api?username=newton-lebniz&show_icons=true&theme=default&hide_border=true&bg_color=F7F8FA&title_color=1B2A4A&text_color=4A5A78&icon_color=C98A2C" alt="newton-lebniz's GitHub stats">
+  </div>
+</section>
 
-    try {
-        let parts = input.split(" ");
-        if (parts.every(p => p==="{" || p==="}" || (parseInt(p)>=1 && parseInt(p)<=26))) {
-            let r = parts.map(token => {
-                if (token==="{") return "{";
-                if (token==="}") return "}";
-                return String.fromCharCode(parseInt(token)+64);
-            }).join("");
-            results += `<p><b>A1Z26:</b> ${r}</p>`;
-        }
-    } catch(e) {}
+<section id="writing">
+  <div class="wrap">
+    <div class="eyebrow">writing</div>
+    <h2 style="margin-bottom:8px;">From the notebook</h2>
+    <p style="color:var(--ink-soft); max-width:560px;">Short writeups on the math and reasoning behind what I build — not just what worked, but why.</p>
 
-    document.getElementById("output").innerHTML = results;
-    document.getElementById("decoded").innerHTML = "";
-}
+    <div class="post">
+      <span class="post-title">Building a chi-squared Caesar cipher cracker</span><span class="post-status">draft</span>
+      <p style="color:var(--ink-soft); font-size:15px; margin-top:4px;">How letter-frequency statistics let a script guess the shift key without brute-forcing all 26 — and where the math breaks on short ciphertexts.</p>
+    </div>
+    <div class="post">
+      <span class="post-title">A picoCTF cryptography writeup, properly explained</span><span class="post-status">draft</span>
+      <p style="color:var(--ink-soft); font-size:15px; margin-top:4px;">Walking through one challenge start to finish — the wrong turns included, not just the solution.</p>
+    </div>
+    <div class="post">
+      <span class="post-title">What building MediFind's vector search taught me about semantic matching</span><span class="post-status">draft</span>
+      <p style="color:var(--ink-soft); font-size:15px; margin-top:4px;">Sentence Transformers, keyword fallback, and why "AI-powered" search still needs a boring backup plan.</p>
+    </div>
+  </div>
+</section>
 
-        function detect() {
-            let input = document.getElementById("input").value.trim();
-            let output = document.getElementById("output");
-            document.getElementById("decoded").innerHTML = "";
-            currentInput = input;
+<section id="contact">
+  <div class="wrap">
+    <div class="eyebrow">contact</div>
+    <h2>Get in touch</h2>
+    <div class="contact-list">
+      <a href="mailto:manswipradhan@gmail.com">manswipradhan@gmail.com</a>
+      <a href="https://www.linkedin.com/in/manswi-pradhan-462a21231" target="_blank" rel="noopener">linkedin.com/in/manswi-pradhan</a>
+      <a href="https://github.com/newton-lebniz" target="_blank" rel="noopener">github.com/newton-lebniz</a>
+    </div>
+  </div>
+</section>
 
-            if (!input) {
-                output.innerHTML = "please enter a string";
-                return;
-            }
+<footer>built with html, css, and too much coffee — updated 2026</footer>
 
-            if (/^[01\s]+$/.test(input) && (input.includes(" ") || input.length % 8 === 0)) {
-                currentType = "binary";
-                output.innerHTML = `
-                    <h3>Detected: Binary</h3>
-                    <h4>Prerequisites:</h4>
-                    <p>1. Binary number system - only 0s and 1s</p>
-                    <p>2. Each group of 8 bits = 1 byte = 1 character</p>
-                    <p>3. ASCII - each character has a binary representation</p>
-                    <button onclick="decode()">Decode</button>
-                `;
-            } else if (/^[0-9a-fA-F\s]+$/.test(input) && input.replaceAll(" ", "").length % 2 === 0) {
-                currentType = "hex";
-                output.innerHTML = `
-                    <h3>Detected: Hex</h3>
-                    <h4>Prerequisites:</h4>
-                    <p>1. ASCII - every character has a number</p>
-                    <p>2. Binary - computers store everything as 0s and 1s</p>
-                    <p>3. Hexadecimal notation - uses 0-9 and A-F</p>
-                    <button onclick="decode()">Decode</button>
-                `;
-            } else if (/^[a-zA-Z0-9+\/]+=*$/.test(input) && input.length % 4 === 0) {
-                currentType = "base64";
-                output.innerHTML = `
-                    <h3>Detected: Base64</h3>
-                    <h4>Prerequisites:</h4>
-                    <p>1. ASCII - every character has a number</p>
-                    <p>2. Binary - bits and bytes</p>
-                    <p>3. Encoding vs Encryption - base64 is NOT encryption</p>
-                    <p>4. Base64 character list - A-Z, a-z, 0-9, +, /</p>
-                    <button onclick="decode()">Decode</button>
-                `;
-            } else if (/^[a-zA-Z\s\{\}_0-9]+$/.test(input) && input.length > 3) {
-                currentType = "caesar";
-                output.innerHTML = `
-                    <h3>Detected: Possibly ROT13 or Caesar Cipher or vegenere cipher</h3>
-                    <h4>Prerequisites:</h4>
-                    <p>1. Alphabet indexing - every letter has a position</p>
-                    <p>2. Caesar cipher - letters shifted by a fixed number</p>
-                    <p>3. ROT13 - Caesar shifted by exactly 13</p>
-                    <p>4. Vigenère cipher is a polyalphabetic encryption method using a keyword to encode a message</p>
-                    <button onclick="decode()">ROT13 Decode</button>
-                    <button onclick="bruteForce()">Brute Force Caesar</button>
-                    <button onclick="vigenereDecode()">vigenere decode</button>
-                `;
-            } else if (/^[0-7\s]+$/.test(input) && input.length > 3) {
-                currentType = "octal";
-                output.innerHTML = `
-                    <h3>Detected: Octal</h3>
-                    <h4>Prerequisites:</h4>
-                    <p>1. Octal number system - uses digits 0-7 only</p>
-                    <p>2. Each octal number represents a character</p>
-                    <p>3. ASCII - each character has an octal representation</p>
-                    <button onclick="decode()">Decode</button>
-                `;
-            } else if (/^[\d\s{}]+$/.test(input)) {
-                currentType = "a1z26";
-                output.innerHTML=`
-                <h3>A1Z26 detected</h3>
-                <h4>prerequisites:</h4>
-                <p>1. alphabet indexing a=1,b=2...</p>
-                <p>2. numbers outsite 1-26 are not letters</p>
-                <button onclick="decode()">decode</button>
-                `;
-            } else if(/^[.\-\s\/]+$/.test(input)){
-                currentType="morse";
-                output.innerHTML=`
-                <h3> morse code detected</h3>
-                <h4>prerequisites</h4>
-                <p>1. morse code uses . and - to represent letters</p>
-                <p>2. each letter is separated by a space</p>
-                <p>3. each word is separated by a /</p>
-                <button onclick="decode()">decode</button>
-                `;
-            } else if (/%[0-9a-fA-F]{2}/.test(input)){
-                currentType="url";
-                output.innerHTML=`
-                <h3>URL encoding detected</h3>
-                <h4>prerequisites:</h4>
-                <p>1. URL encoding replaces unsafe characters with % followed by hex code</p>
-                <p>2. space becomes %20, { becomes %7B, } becomes %7D</p>
-                <p>3. used in web requests to safely transfmit speacial characters</p>
-                <p>4. common in web exploitation ctf challenges</p>
-                <button onclick="decode()">decode</button>
-                `;
-            } else {
-                output.innerHTML = "<p>Could not identify encoding type</p>";
-            }
-        }
+<script>
+  // Hero decode effect: scrambled string resolves into the name, nodding to the Caesar-cracker project.
+  const target = "MANSWI PRADHAN";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const el = document.getElementById('decodeText');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        function decode() {
-            let input = currentInput;
-            let result = "";
+  function randChar(){ return chars[Math.floor(Math.random()*chars.length)]; }
 
-            if (currentType === "binary") {
-                let bytes = input.includes(" ") ? input.trim().split(" ") : input.trim().match(/.{8}/g);
-                result = bytes.map(b => String.fromCharCode(parseInt(b, 2))).join("");
-            } else if (currentType === "hex") {
-                let clean = input.replaceAll(" ", "");
-                for (let i = 0; i < clean.length; i += 2) {
-                    result += String.fromCharCode(parseInt(clean.substr(i, 2), 16));
-                }
-            } else if (currentType === "base64") {
-                result = atob(input);
-            } else if (currentType === "caesar") {
-                result = input.split("").map(c => {
-                    if (/[a-zA-Z]/.test(c)) {
-                        let base = c === c.toUpperCase() ? 65 : 97;
-                        return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
-                    }
-                    return c;
-                }).join("");
-            } else if (currentType === "octal") {
-                result = input.trim().split(" ").map(o => String.fromCharCode(parseInt(o, 8))).join("");
-            } else if(currentType==="a1z26"){
-                result = input.split(" ").map(token =>{
-                    if(token === "{") return "{";
-                    if (token === "}") return "}";
-                    let num = parseInt(token);
-                    if(num>=1 && num<=26){
-                        return String.fromCharCode(num+64);
-                    }
-                    return token;
-                }).join("");
-            } else if (currentType==="url"){
-                result=decodeURIComponent(input);
-            } else if(currentType==="morse"){
-                const morseMap = {
-                    '.-':'A', '-...':'B', '-.-.':'C', '-..':'D', '.':'E',
-        '..-.':'F', '--.':'G', '....':'H', '..':'I', '.---':'J',
-        '-.-':'K', '.-..':'L', '--':'M', '-.':'N', '---':'O',
-        '.--.':'P', '--.-':'Q', '.-.':'R', '...':'S', '-':'T',
-        '..-':'U', '...-':'V', '.--':'W', '-..-':'X', '-.--':'Y',
-        '--..':'Z'
-                };
-                result = input.trim().split(" / ").map(word=>
-                    word.split(" ").map(code => morseMap[code] || "?").join("")
-                ).join(" ");
-            }
+  if(prefersReduced){
+    el.textContent = target;
+  } else {
+    let revealed = 0;
+    const frame = () => {
+      let out = "";
+      for(let i=0;i<target.length;i++){
+        if(target[i] === " "){ out += " "; continue; }
+        out += i < revealed ? target[i] : randChar();
+      }
+      el.textContent = out;
+      if(revealed < target.length){
+        revealed += 0.3;
+        requestAnimationFrame(frame);
+      } else {
+        el.textContent = target;
+      }
+    };
+    let ticks = 0;
+    const interval = setInterval(() => {
+      ticks++;
+      let out = "";
+      for(let i=0;i<target.length;i++){
+        if(target[i] === " "){ out += " "; continue; }
+        out += i < ticks*1.1 ? target[i] : randChar();
+      }
+      el.textContent = out;
+      if(ticks*1.1 >= target.length){
+        clearInterval(interval);
+        el.textContent = target;
+      }
+    }, 45);
+  }
+</script>
 
-            let decodedDiv = document.getElementById("decoded");
-            decodedDiv.textContent = "decoded: " + result;
-        }
-
-        function vigenereDecode(){
-        let keyInput = document.getElementById("vigenereKey");
-        
-        if(keyInput.style.display==="none" || keyInput.style.display === ""){
-            keyInput.style.display="inline-block";
-            keyInput.focus();
-            return;
-        }
-
-        let key = keyInput.value.toUpperCase();
-        if(!key){
-            keyInput.focus();
-            return;
-        }
-            let input = currentInput;
-            let result = "";
-            let keyIndex = 0;
-
-            for(let i=0;i<input.length;i++){
-                let c = input[i];
-                if(/[a-zA-Z]/.test(c)){
-                    let base = c === c.toUpperCase()?65:97;
-                    let shift = key.charCodeAt(keyIndex%key.length) - 65;
-                    result += String.fromCharCode((c.charCodeAt(0)-base-shift+26)%26+base); // 26 add kiya coz without it values can be -ve too and charcode cant handle that 
-                    keyIndex++;
-                }
-                else{
-                    result+=c;
-                }
-            }
-            let decodedDiv= document.getElementById("decoded");
-            decodedDiv.textContent="vigenere decoded:" + result;
-            document.getElementById("decoded").innerHTML = "<h3>vigenere decoded: " + result +"</h3>";
-        }
-
-        function bruteForce() {
-            let input = currentInput;
-            let result = "<h3>All Caesar Shifts:</h3>";
-            for (let shift = 1; shift <= 25; shift++) {
-                let decoded = input.split("").map(c => {
-                    if (/[a-zA-Z]/.test(c)) {
-                        let base = c === c.toUpperCase() ? 65 : 97;
-                        return String.fromCharCode((c.charCodeAt(0) - base + shift) % 26 + base);
-                    }
-                    return c;
-                }).join("");
-                result += `<p>Shift ${shift}: ${decoded}</p>`;
-            }
-            document.getElementById("decoded").innerHTML = result;
-        }
-    </script>
 </body>
 
 </html>
-
