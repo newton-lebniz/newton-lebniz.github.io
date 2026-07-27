@@ -28,97 +28,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg: #F7F8FA;
-    --grid-line: #E2E6ED;
-    --ink: #1B2A4A;
-    --ink-soft: #4A5A78;
-    --amber: #C98A2C;
-    --forest: #2F6F4F;
-    --card-dark: #101826;
-    --card-dark-text: #E7ECF3;
-    --border: #D7DCE5;
-    --max-w: 880px;
-  }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  html{ scroll-behavior:smooth; }
-  body{
-    background-color: var(--bg);
-    background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 28px 28px;
-    color: var(--ink);
-    font-family: 'IBM Plex Sans', sans-serif;
-    line-height: 1.6;
-  }
-  h1,h2,h3{ font-family:'Spectral', serif; font-weight:600; color:var(--ink); }
-  a{ color:var(--amber); text-decoration:none; }
-  a:hover{ text-decoration:underline; }
-  a:focus-visible, button:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
-  code, .mono{ font-family:'IBM Plex Mono', monospace; }
+<link rel="stylesheet" href="assets/css/style.css">
 
-  .wrap{ max-width:var(--max-w); margin:0 auto; padding:0 24px; }
-  section{ padding:72px 0; border-bottom:1px solid var(--border); }
-  section:last-of-type{ border-bottom:none; }
-  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--forest); letter-spacing:.04em; margin-bottom:8px; }
-  .eyebrow::before{ content:"§ "; color:var(--amber); }
-
-  /* HERO */
-  .hero{ padding-top:96px; padding-bottom:56px; }
-  .hero-role{ font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--ink-soft); margin-bottom:18px; }
-  .decode{ font-size:clamp(36px,7vw,64px); font-weight:700; letter-spacing:-0.01em; min-height:1.2em; }
-  .decode .amber{ color:var(--amber); }
-  .hero-sub{ margin-top:20px; max-width:560px; color:var(--ink-soft); font-size:17px; }
-  .hero-links{ margin-top:28px; display:flex; gap:20px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:14px; }
-
-  /* ABOUT */
-  .about-text{ max-width:640px; color:var(--ink-soft); font-size:17px; }
-  .about-text strong{ color:var(--ink); }
-
-  /* PROJECTS */
-  .project{ padding:28px 0; border-top:1px solid var(--border); }
-  .project:first-of-type{ border-top:none; }
-  .project-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
-  .project-head h3{ font-size:22px; }
-  .project-role{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--forest); text-transform:uppercase; letter-spacing:.05em; }
-  .project p{ color:var(--ink-soft); margin-top:8px; max-width:640px; }
-  .project-contrib{ margin-top:8px; font-size:15px; }
-  .project-contrib strong{ color:var(--ink); }
-  .tags{ margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
-  .tag{ font-family:'IBM Plex Mono', monospace; font-size:12px; background:#EDF0F5; border:1px solid var(--border); color:var(--ink-soft); padding:3px 9px; border-radius:3px; }
-  .project-links{ margin-top:14px; display:flex; gap:18px; font-family:'IBM Plex Mono', monospace; font-size:13px; }
-
-  /* SKILLS */
-  .skill-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
-  .skill-group h4{ font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--forest); margin-bottom:10px; text-transform:uppercase; letter-spacing:.04em; }
-  .skill-group ul{ list-style:none; color:var(--ink-soft); font-size:15px; }
-  .skill-group li{ padding:3px 0; }
-  @media (max-width:560px){ .skill-grid{ grid-template-columns:1fr; } }
-
-  /* RESUME */
-  .resume-card{ background:var(--card-dark); color:var(--card-dark-text); padding:28px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
-  .resume-card p{ color:#AAB6C8; font-size:14px; margin-top:4px; }
-  .btn{ font-family:'IBM Plex Mono', monospace; background:var(--amber); color:#1B1408; padding:10px 20px; border-radius:4px; font-size:14px; font-weight:600; display:inline-block; }
-  .btn:hover{ text-decoration:none; filter:brightness(1.08); }
-
-  /* GITHUB STATS */
-  .stats-img{ width:100%; max-width:480px; border-radius:6px; border:1px solid var(--border); }
-
-  /* WRITING */
-  .post{ padding:18px 0; border-top:1px solid var(--border); }
-  .post:first-of-type{ border-top:none; }
-  .post-title{ font-size:18px; font-weight:600; }
-  .post-status{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft); background:#EDF0F5; padding:2px 8px; border-radius:3px; margin-left:8px; }
-
-  /* CONTACT */
-  .contact-list{ font-family:'IBM Plex Mono', monospace; font-size:16px; display:flex; flex-direction:column; gap:10px; margin-top:16px; }
-
-  footer{ padding:32px 0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft); }
-
-  @media (prefers-reduced-motion: reduce){ * { animation:none !important; transition:none !important; } }
-</style>
 </head>
 <body>
 
@@ -282,49 +193,7 @@
 
 <footer>built with html, css, and too much coffee — updated 2026</footer>
 
-<script>
-  // Hero decode effect: scrambled string resolves into the name, nodding to the Caesar-cracker project.
-  const target = "MANSWI PRADHAN";
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const el = document.getElementById('decodeText');
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function randChar(){ return chars[Math.floor(Math.random()*chars.length)]; }
-
-  if(prefersReduced){
-    el.textContent = target;
-  } else {
-    let revealed = 0;
-    const frame = () => {
-      let out = "";
-      for(let i=0;i<target.length;i++){
-        if(target[i] === " "){ out += " "; continue; }
-        out += i < revealed ? target[i] : randChar();
-      }
-      el.textContent = out;
-      if(revealed < target.length){
-        revealed += 0.3;
-        requestAnimationFrame(frame);
-      } else {
-        el.textContent = target;
-      }
-    };
-    let ticks = 0;
-    const interval = setInterval(() => {
-      ticks++;
-      let out = "";
-      for(let i=0;i<target.length;i++){
-        if(target[i] === " "){ out += " "; continue; }
-        out += i < ticks*1.1 ? target[i] : randChar();
-      }
-      el.textContent = out;
-      if(ticks*1.1 >= target.length){
-        clearInterval(interval);
-        el.textContent = target;
-      }
-    }, 45);
-  }
-</script>
+<script src="assets/js/main.js"></script>
 
 </body>
 
