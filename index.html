@@ -7,7 +7,7 @@
 <meta name="description" content="Manswi Pradhan — B.Tech Mathematics & Computing student at IIIT Raichur. Builds explainable tools across cybersecurity, applied ML, and cryptography.">
 <meta name="keywords" content="Manswi Pradhan, IIIT Raichur, Mathematics and Computing, CTF, cybersecurity, machine learning, cryptography, portfolio">
 <meta name="author" content="Manswi Pradhan">
-<meta name="theme-color" content="#1B2A4A">
+<meta name="theme-color" content="#22283B">
 <link rel="canonical" href="https://newton-lebniz.github.io/">
 
 <!-- Open Graph -->
@@ -33,7 +33,21 @@
 </head>
 <body>
 
-<div class="wrap hero">
+<nav class="sitenav">
+  <div class="wrap">
+    <a class="mark" href="#top">M.P.</a>
+    <div class="navlinks">
+      <a href="#about">Observe</a>
+      <a href="#projects">Build</a>
+      <a href="#skills">Think</a>
+      <a href="#writing">Archive</a>
+      <a href="#contact">Transmit</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap hero" id="top">
+  <p class="hero-quip">There are roughly <span class="amber">10<sup>80</sup></span> atoms in the observable universe. So far I've automated the classification of about 15 of them — they were fruit.</p>
   <div class="hero-role">B.Tech Mathematics &amp; Computing — IIIT Raichur</div>
   <h1 class="decode mono" id="decodeText">MANSWI PRADHAN</h1>
   <p class="hero-sub">I build tools that explain themselves — a Caesar-cipher cracker that shows its chi-squared math, a medical chatbot that shows its reasoning. Currently deep in CTF challenges and web security.</p>
@@ -47,23 +61,36 @@
 
 <section id="about">
   <div class="wrap">
-    <div class="eyebrow">about</div>
-    <p class="about-text">2nd-year <strong>Mathematics &amp; Computing</strong> student at IIIT Raichur, coming in with a Mass Communication background — which mostly means I default to explaining things clearly instead of assuming the reader already knows the jargon. That habit shows up in my projects: every tool I build tries to teach the "why," not just spit out an answer. I compete in CTFs and hackathons, and I'm using cybersecurity as my differentiator against a very ML-heavy peer group.</p>
+    <div class="eyebrow">observe</div>
+    <h2 style="margin-bottom:8px;">Things I currently believe</h2>
+    <p class="about-text">Second-year <strong>Mathematics &amp; Computing</strong> at IIIT Raichur, arrived with a Mass Communication background instead of a coding one. Here's what that combination has taught me so far — subject to revision as evidence comes in.</p>
+    <div class="beliefs">
+      <div class="belief" tabindex="0"><span class="belief-tag">on ciphers</span>Every complex cipher is just statistics wearing a disguise.</div>
+      <div class="belief" tabindex="0"><span class="belief-tag">on tools</span>An answer without the "why" is just a guess with better formatting.</div>
+      <div class="belief" tabindex="0"><span class="belief-tag">on background</span>A Mass Comm background isn't a handicap in a math degree — it's a debugging tool for other people's confusion.</div>
+      <div class="belief" tabindex="0"><span class="belief-tag">on bugs</span>Most interesting bugs are just wrong assumptions with excellent uptime.</div>
+      <div class="belief" tabindex="0"><span class="belief-tag">on CTFs</span>CTFs are 50% cryptography, 50% patience, and 100% snacks.</div>
+      <div class="belief" tabindex="0"><span class="belief-tag">on differentiation</span>In a peer group that's very ML-heavy, cybersecurity turned out to be a fine hill to plant a flag on.</div>
+    </div>
   </div>
 </section>
 
 <section id="projects">
   <div class="wrap">
-    <div class="eyebrow">what I've built</div>
-    <h2 style="margin-bottom:8px;">Projects</h2>
+    <div class="eyebrow">build</div>
+    <h2 style="margin-bottom:8px;">Research notes</h2>
 
     <div class="project">
       <div class="project-head">
         <h3>CTF Learning Assistant</h3>
         <span class="project-role">Solo project</span>
       </div>
-      <p>A browser-based tool that detects encoding types from raw strings and teaches the prerequisite concepts before showing the decode — built because most CTF tools just hand you an answer with zero explanation.</p>
-      <div class="project-contrib"><strong>Built:</strong> detectors for 10+ encodings (Base64, Hex, Binary, ROT13, Vigenère, Morse, Octal, A1Z26, URL encoding), chi-squared frequency analysis for auto-cracking Caesar ciphers, and a Base32/XOR detector layer.</div>
+      <dl class="project-notes">
+        <dt>Question</dt><dd>Most CTF tools just hand you an answer — what if one taught the underlying concept first?</dd>
+        <dt>Approach</dt><dd>Built browser-based detectors for 10+ encodings (Base64, Hex, Binary, ROT13, Vigenère, Morse, Octal, A1Z26, URL, XOR/Base32).</dd>
+        <dt>Discovery</dt><dd>Chi-squared frequency analysis can guess a Caesar shift without brute-forcing all 26 — letters gossip about themselves.</dd>
+        <dt>Improve</dt><dd>Extend the frequency analysis so it holds up on short ciphertexts, where the statistics get shaky.</dd>
+      </dl>
       <div class="tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Cybersecurity</span></div>
       <div class="project-links">
         <a href="https://newton-lebniz.github.io/CTF-Learning-Assistant/" target="_blank" rel="noopener">live demo →</a>
@@ -76,8 +103,12 @@
         <h3>MediFind</h3>
         <span class="project-role">3-person team · supervised by Dr. Kaushiki Roy</span>
       </div>
-      <p>An AI-powered medical chatbot that triages symptoms and recommends nearby doctors based on specialty-matching.</p>
-      <div class="project-contrib"><strong>My contribution:</strong> the full frontend, the vector search layer (semantic specialist-matching using Sentence Transformers), AI classification with a keyword fallback, and symptom extraction.</div>
+      <dl class="project-notes">
+        <dt>Question</dt><dd>Can a chatbot triage symptoms and point someone to the right specialist, not just "a doctor"?</dd>
+        <dt>Approach</dt><dd>Owned the full frontend, a semantic specialist-matching layer using Sentence Transformers, and symptom extraction/classification via Groq/LLaMA + FastAPI, backed by a keyword fallback.</dd>
+        <dt>Discovery</dt><dd>"AI-powered" search still needs a boring backup plan for when the vectors don't cooperate.</dd>
+        <dt>Improve</dt><dd>Tighten the fallback logic so it reads less like a backup and more like a second opinion.</dd>
+      </dl>
       <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Sentence Transformers</span><span class="tag">Groq/LLaMA</span><span class="tag">MySQL</span></div>
       <div class="project-links">
         <a href="https://github.com/newton-lebniz/MediFind" target="_blank" rel="noopener">source →</a>
@@ -89,8 +120,12 @@
         <h3>Fruit Recognition — VGG16 Transfer Learning</h3>
         <span class="project-role">3-person team</span>
       </div>
-      <p>A 15-class fruit image classifier built on a transfer-learned VGG16 backbone, comparing CrossEntropy vs Focal Loss.</p>
-      <div class="project-contrib"><strong>My contribution:</strong> model architecture (frozen conv layers, custom classifier head) and the training loop — Experiment 1 hit 97% test accuracy.</div>
+      <dl class="project-notes">
+        <dt>Question</dt><dd>Can a model tell 15 kinds of fruit apart — and does the choice of loss function actually matter?</dd>
+        <dt>Approach</dt><dd>Transfer-learned VGG16 backbone (frozen conv layers, custom classifier head), comparing CrossEntropy vs Focal Loss, plus the training loop.</dd>
+        <dt>Discovery</dt><dd>Best experiment hit 97% test accuracy — turns out fruit is more classifiable than people.</dd>
+        <dt>Improve</dt><dd>Test against messier real-world photos instead of clean dataset images.</dd>
+      </dl>
       <div class="tags"><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Transfer Learning</span></div>
       <div class="project-links">
         <a href="https://github.com/newton-lebniz/Fruit-Recognition" target="_blank" rel="noopener">source →</a>
@@ -102,8 +137,12 @@
         <h3>picoCTF Writeups</h3>
         <span class="project-role">Solo</span>
       </div>
-      <p>Solutions and walkthroughs across Forensics, Cryptography, and General Skills categories — written to show the reasoning path to a solve, not just the final flag.</p>
-      <div class="project-contrib"><strong>Structure:</strong> organized by category (Forensics, Cryptography, General Skills), each writeup covering the tools used, the dead ends hit, and the actual technique that cracked it.</div>
+      <dl class="project-notes">
+        <dt>Question</dt><dd>How do you document a CTF solve so it's still useful to someone who isn't you in six months?</dd>
+        <dt>Approach</dt><dd>Organized writeups by category (Forensics, Cryptography, General Skills), each covering the tools used and the dead ends hit.</dd>
+        <dt>Discovery</dt><dd>The dead ends usually teach more than the solve does.</dd>
+        <dt>Improve</dt><dd>Add a "time to solve" note per writeup to track improvement over time.</dd>
+      </dl>
       <div class="tags"><span class="tag">Cryptography</span><span class="tag">Forensics</span><span class="tag">CTF</span></div>
       <div class="project-links">
         <a href="https://github.com/newton-lebniz/picoCTF-writeups" target="_blank" rel="noopener">source →</a>
@@ -114,26 +153,50 @@
 
 <section id="skills">
   <div class="wrap">
-    <div class="eyebrow">tech</div>
-    <h2 style="margin-bottom:24px;">Skills</h2>
-    <div class="skill-grid">
-      <div class="skill-group">
-        <h4>Languages</h4>
-        <ul><li>C</li><li>Java</li><li>Python</li><li>JavaScript</li></ul>
+    <div class="eyebrow">think</div>
+    <h2 style="margin-bottom:8px;">Skills, plotted instead of bar-charted</h2>
+    <p style="color:var(--ink-soft); max-width:560px; margin-bottom:24px;">Progress bars don't say much. This is confidence against hours actually logged — hover or tab to a point for the honest version.</p>
+
+    <div class="skill-chart-wrap">
+      <div class="skill-chart">
+        <svg viewBox="0 0 460 320" role="img" aria-label="Scatter plot of skills by confidence and experience">
+          <!-- gridlines -->
+          <g class="skill-gridline">
+            <line x1="50" y1="20" x2="50" y2="260"></line>
+            <line x1="124" y1="20" x2="124" y2="260"></line>
+            <line x1="198" y1="20" x2="198" y2="260"></line>
+            <line x1="272" y1="20" x2="272" y2="260"></line>
+            <line x1="346" y1="20" x2="346" y2="260"></line>
+            <line x1="420" y1="20" x2="420" y2="260"></line>
+            <line x1="50" y1="260" x2="420" y2="260"></line>
+            <line x1="50" y1="212" x2="420" y2="212"></line>
+            <line x1="50" y1="164" x2="420" y2="164"></line>
+            <line x1="50" y1="116" x2="420" y2="116"></line>
+            <line x1="50" y1="68" x2="420" y2="68"></line>
+            <line x1="50" y1="20" x2="420" y2="20"></line>
+          </g>
+          <text class="skill-axis-label" x="235" y="300" text-anchor="middle">confidence →</text>
+          <text class="skill-axis-label" x="-140" y="14" text-anchor="middle" transform="rotate(-90)">experience →</text>
+
+          <circle class="skill-point" tabindex="0" cx="383" cy="68" r="6" data-name="Python" data-note="Everyday language — the CTF tools, MediFind's backend, and the fruit classifier all lean on it."><title>Python</title></circle>
+          <circle class="skill-point" tabindex="0" cx="327.5" cy="92" r="6" data-name="Git &amp; Linux" data-note="The tools I reach for without thinking, which is sort of the whole point."><title>Git &amp; Linux</title></circle>
+          <circle class="skill-point" tabindex="0" cx="346" cy="116" r="6" data-name="Cryptography &amp; Statistics" data-note="The chi-squared Caesar cracker is basically a stats degree in disguise."><title>Cryptography &amp; Statistics</title></circle>
+          <circle class="skill-point" tabindex="0" cx="290.5" cy="128" r="6" data-name="HTML / CSS" data-note="This site is the proof of work."><title>HTML / CSS</title></circle>
+          <circle class="skill-point" tabindex="0" cx="253.5" cy="116" r="6" data-name="C" data-note="Where I learned to actually respect memory."><title>C</title></circle>
+          <circle class="skill-point" tabindex="0" cx="272" cy="152" r="6" data-name="PyTorch" data-note="97% on 15 fruit classes says as much about the dataset as it does about me."><title>PyTorch</title></circle>
+          <circle class="skill-point" tabindex="0" cx="216.5" cy="140" r="6" data-name="Java" data-note="Solid, dependable, rarely surprising — in a good way."><title>Java</title></circle>
+          <circle class="skill-point" tabindex="0" cx="198" cy="164" r="6" data-name="Sentence Transformers" data-note="Great until it isn't — hence the keyword fallback."><title>Sentence Transformers</title></circle>
+          <circle class="skill-point" tabindex="0" cx="179.5" cy="183.2" r="6" data-name="FastAPI &amp; MySQL" data-note="The unglamorous plumbing behind MediFind."><title>FastAPI &amp; MySQL</title></circle>
+          <circle class="skill-point" tabindex="0" cx="161" cy="192.8" r="6" data-name="MATLAB" data-note="Mostly for when the math needs to see itself plotted."><title>MATLAB</title></circle>
+        </svg>
       </div>
-      <div class="skill-group">
-        <h4>ML / Data</h4>
-        <ul><li>PyTorch</li><li>Sentence Transformers</li><li>MySQL</li></ul>
-      </div>
-      <div class="skill-group">
-        <h4>Web</h4>
-        <ul><li>HTML / CSS</li><li>FastAPI</li></ul>
-      </div>
-      <div class="skill-group">
-        <h4>Tools</h4>
-        <ul><li>Linux</li><li>Git</li></ul>
+      <div class="skill-note" id="skillNote">
+        <strong>Python</strong>
+        Hover or tab to a point on the plot to read the honest version of that skill.
       </div>
     </div>
+
+    <p class="cp-line"><strong>CodeChef</strong> (newton_lebniz) — Rookie league, 882 rating · 1246 DSA rating · 110+ problems solved across 8 rated contests.</p>
   </div>
 </section>
 
@@ -154,13 +217,13 @@
   <div class="wrap">
     <div class="eyebrow">activity</div>
     <h2 style="margin-bottom:20px;">GitHub</h2>
-    <img class="stats-img" src="https://github-readme-stats-fast.vercel.app/api?username=newton-lebniz&show_icons=true&theme=default&hide_border=true&bg_color=F7F8FA&title_color=1B2A4A&text_color=4A5A78&icon_color=C98A2C" alt="newton-lebniz's GitHub stats">
+    <img class="stats-img" src="https://github-readme-stats-fast.vercel.app/api?username=newton-lebniz&show_icons=true&theme=default&hide_border=true&bg_color=F8F6F1&title_color=22283B&text_color=565F78&icon_color=C98A2C" alt="newton-lebniz's GitHub stats">
   </div>
 </section>
 
 <section id="writing">
   <div class="wrap">
-    <div class="eyebrow">writing</div>
+    <div class="eyebrow">archive</div>
     <h2 style="margin-bottom:8px;">From the notebook</h2>
     <p style="color:var(--ink-soft); max-width:560px;">Short writeups on the math and reasoning behind what I build — not just what worked, but why.</p>
 
@@ -181,8 +244,8 @@
 
 <section id="contact">
   <div class="wrap">
-    <div class="eyebrow">contact</div>
-    <h2>Get in touch</h2>
+    <div class="eyebrow">transmit</div>
+    <h2>If you've read this far, we probably have something to talk about.</h2>
     <div class="contact-list">
       <a href="mailto:manswipradhan@gmail.com">manswipradhan@gmail.com</a>
       <a href="https://www.linkedin.com/in/manswi-pradhan-462a21231" target="_blank" rel="noopener">linkedin.com/in/manswi-pradhan</a>
@@ -191,7 +254,13 @@
   </div>
 </section>
 
-<footer>built with html, css, and too much coffee — updated 2026</footer>
+<footer>
+  built with html, css, and too much coffee — updated 2026
+  <span class="joke" id="footerJoke">There are only 10 kinds of people: those who understand binary, and those who don't.</span>
+  <noscript><span class="joke">There are only 10 kinds of people: those who understand binary, and those who don't.</span></noscript>
+</footer>
+
+<div id="piBadge" aria-live="polite"></div>
 
 <script src="assets/js/main.js"></script>
 
