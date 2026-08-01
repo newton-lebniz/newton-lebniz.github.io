@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Building a chi-squared Caesar cipher cracker</title>
+
+  <!-- The ../ is important because this page is inside notebook/ -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    .notebook-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 120px 24px 80px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 45px;
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--ink);
+    }
+
+    .notebook-label {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .notebook-page h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.05;
+      margin-bottom: 40px;
+    }
+
+    .notebook-page h2 {
+      margin-top: 55px;
+      margin-bottom: 18px;
+      font-size: 28px;
+    }
+
+    .notebook-page p,
+    .notebook-page li {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+
+    .notebook-page ol {
+      padding-left: 25px;
+    }
+
+    .notebook-page pre {
+      overflow-x: auto;
+      padding: 24px;
+      margin: 30px 0;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .notebook-page code {
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .source-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="notebook-page">
+
+    <a class="back-link" href="/">
+      ← Back to portfolio
+    </a>
+
+    <div class="notebook-label">
+      NOTEBOOK ENTRY · CRYPTOGRAPHY
+    </div>
+
+    <h1>
+      Building a chi-squared Caesar cipher cracker
+    </h1>
+
+    <p>
+      Here's the annoying thing about the Caesar cipher:
+      everyone's first instinct is to just brute-force it.
+      There are only 26 possible shifts, so you try all of them,
+      print the results, and eyeball which one reads like English.
+    </p>
+
+    <p>
+      That works. It's also a little bit of a cop-out — you're
+      outsourcing the "which one is English" decision to a human,
+      which means the moment you want to automate it, you're stuck.
+    </p>
+
+    <p>
+      So the actual question isn't "how do I decode this," it's
+      "how do I make a computer recognize English without reading it?"
+    </p>
+
+    <h2>Letters gossip</h2>
+
+    <p>
+      Turns out: letters gossip.
+    </p>
+
+    <p>
+      In any large enough sample of English text, letters don't
+      show up with equal frequency. E shows up constantly — around
+      12–13% of all letters. Z, Q, and X barely show up at all.
+      This isn't a coincidence; it's a fingerprint.
+    </p>
+
+    <p>
+      Every language has one, and it's stable enough that if you
+      shift the entire alphabet by some amount N, that fingerprint
+      shifts with it, intact, just rotated.
+    </p>
+
+    <p>
+      That's the whole trick. You don't need to read the decoded
+      text to know if it's English — you just need to check whether
+      its letter-frequency fingerprint matches English's fingerprint.
+    </p>
+
+    <h2>The chi-squared approach</h2>
+
+    <p>
+      The tool for measuring how far a letter-frequency fingerprint
+      is from the expected English fingerprint already exists in
+      statistics: the chi-squared statistic.
+    </p>
+
+    <p>
+      For each of the 26 possible shifts:
+    </p>
+
+    <ol>
+      <li>Decode the ciphertext assuming that shift.</li>
+      <li>Count how often each letter from A–Z appears.</li>
+      <li>Compare the count with standard English frequencies.</li>
+      <li>Calculate the chi-squared score.</li>
+      <li>Keep the shift with the lowest score.</li>
+    </ol>
+
+    <pre><code>for shift in 0..25:
+    decoded = caesar_decode(ciphertext, shift)
+    freq = letter_frequencies(decoded)
+    score = chi_squared(freq, ENGLISH_FREQ)
+    track best (lowest score)</code></pre>
+
+    <p>
+      Lower chi-squared means the decoded text is closer to normal
+      English. The shift with the lowest score wins.
+    </p>
+
+    <p>
+      No brute-force eyeballing and no human in the loop — the
+      statistics point at the answer.
+    </p>
+
+    <h2>Where it actually breaks</h2>
+
+    <p>
+      Short ciphertexts.
+    </p>
+
+    <p>
+      Chi-squared needs enough letters for the fingerprint to
+      stabilize. Feed it a 12-character message and the fingerprint
+      is mostly noise, so the statistic can confidently point at
+      the wrong shift.
+    </p>
+
+    <p>
+      The next thing to fix is either to fall back to
+      brute-force-with-dictionary-check below some length threshold,
+      or to weight the score by a confidence interval that widens
+      as the ciphertext gets shorter.
+    </p>
+
+    <h2>Also shipped alongside this</h2>
+
+    <p>
+      Base32 detection and single-byte XOR brute force — because in
+      an actual CTF challenge, half the battle isn't decoding. It's
+      figuring out what encoding you're even staring at before you
+      can decode anything.
+    </p>
+
+    <a
+      class="source-link"
+      href="https://github.com/newton-lebniz/CTF-Learning-Assistant"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Source: CTF Learning Assistant on GitHub →
+    </a>
+
+  </main>
+
+</body>
+</html>
